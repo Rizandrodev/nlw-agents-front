@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle
 } from "./ui/card";
 import z from 'zod'
@@ -32,16 +33,20 @@ export function CreateRoomForm() {
 
   async function handleCreateRoom({name,description}:createRoomFormData){
     await createRoom({name,description})
+   createRoomForm.reset()
   }
   return (
     <div>
       <Card>
-        <CardTitle>Criar Sala</CardTitle>
-        <CardDescription>
-          Crie uma nova sala pra comecar a fazer perguntas e receber respostas
-          de I.A
-        </CardDescription>
-        <CardContent>
+        <CardHeader>  
+          <CardTitle>Criar Sala</CardTitle>
+          <CardDescription >
+            Crie uma nova sala pra comecar a fazer perguntas e
+            receber respostas
+            de I.A
+          </CardDescription>
+          </CardHeader>
+          <CardContent>
           <Form {...createRoomForm}>
             <form
             onSubmit={createRoomForm.handleSubmit(handleCreateRoom)}
