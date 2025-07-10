@@ -1,27 +1,15 @@
+// biome-ignore assist/source/organizeImports: Link>
 import { Link } from "react-router-dom"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { ArrowRight } from "lucide-react"
-import { useQuery } from "@tanstack/react-query";
 import { getRelativeTime } from "../../util/day-fn"
+import {UseRooms} from '../http/use-rooms'
 
 
-type GetRoomsAPIResponse = Array<{
-  id: string;
-  name: string;
-  QuestionsCount: number;
-  createdAt: string
-}>;
 
 export function RoomList() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['get-rooms'],
-    queryFn: async () => {
-      const response = await fetch('http://localhost:3333/rooms');
-      const result: GetRoomsAPIResponse = await response.json();
-      return result;
-    }
-  });
+  const   {data,isLoading}=UseRooms()
 
   return (
     <Card>
