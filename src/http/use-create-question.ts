@@ -20,7 +20,7 @@ export function UseCreateQuestion(roomId:string) {
     },
 
     onSuccess: () => {//    Depois que eu crio uma nova sala com POST /rooms, atualiza a lista de salas automaticamente.
-      queryClient.invalidateQueries({ queryKey: ["get-questions ",roomId] })
+      queryClient.invalidateQueries({ queryKey: ["get-questions",roomId] })
     }
   })
 }

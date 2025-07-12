@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { CreateRoom } from "./pages/createRoom"
 import { Room } from "./pages/room"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReacordRoomAudio } from "./pages/record-room-audio"
+import {RecordRoomAudio } from "./pages/record-room-audio"
 
 const queryClient = new QueryClient()
 function App() {
@@ -15,7 +15,7 @@ function App() {
           {/** biome-ignore assist/source/useSortedAttributes: <explanation> */}
           <Route path="/room/:roomId" element={<Room />} />
           {/** biome-ignore assist/source/useSortedAttributes: <explanation> */}
-          <Route path="/room/:roomId/audio" element={<ReacordRoomAudio/>} />
+          <Route path="/room/:roomId/audio" element={<RecordRoomAudio/>} />
  
         </Routes>
       </BrowserRouter>

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Navigate, useParams } from "react-router-dom";
 
 
 //your browser suport recording audio
@@ -9,9 +10,35 @@ const isRecordingSupported = !!navigator.mediaDevices &&
   typeof navigator.mediaDevices.getUserMedia === 'function' &&
   typeof window.MediaRecorder === 'function'
 
+  type RoomParams   = {
+  roomId: string
+}
+
 export function RecordRoomAudio() {
   const [isRecording, setIsRecording] = useState(false)
   const recorder = useRef<MediaRecorder | null>(null)
+  
+    const params = useParams<RoomParams>()
+
+  
+async function uploadAudio(audio: Blob) {
+    const formData = new FormData(); // Usando multipart/form-data para enviar arquivo
+    formData.append('file', audio, 'audio.webm');
+
+    try {
+      const response = await fetch(`http://localhost:3333/rooms/${params.roomId}/audio`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      console.log(response); // <- Movido para fora do `return`
+      return response;
+    } catch (error) {
+      console.error('Erro ao enviar áudio:', error);
+    }
+  }
+
+  
   // biome-ignore lint/suspicious/useAwait: <explanation>
   async function stopRecording() {
     setIsRecording(false)
@@ -20,6 +47,9 @@ export function RecordRoomAudio() {
       recorder.current.stop()
     }
   }
+
+
+  
 
   async function startRecording() {
     if (!isRecordingSupported) {
@@ -38,11 +68,11 @@ export function RecordRoomAudio() {
     recorder.current = new MediaRecorder(audio, {
       mimeType: 'audio/webm',
       audioBitsPerSecond: 64_800
-    })
+    })  
 
     recorder.current.ondataavailable = event => {
       if (event.data.size > 0) {
-        console.log(event.data)
+        uploadAudio(event.data)
       }
     }
 
@@ -56,6 +86,9 @@ export function RecordRoomAudio() {
     recorder.current.start()
   }
 
+  if (!params.roomId) {
+    return <Navigate replace to="/" />
+  }
   return (
     <div className='flex h-screen flex-col items-center justify-center gap-3'>
       {isRecording ? (
